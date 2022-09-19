@@ -6,6 +6,33 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+
+
+model User{
+   id       String @id @default(uuid())
+   name     String 
+   username String @unique
+   password String
+
+   refresh_token RefreshToken?
+
+
+   @@map("users")
+
+ 
+}
+
+
+model RefreshToken{
+  id String @id @default(uuid())
+  expiresIn  Int
+  user       User   @relation(fields: [userId], references: [id])
+  userId     String @unique
+
+
+  @@map("refresh_token")
 }
